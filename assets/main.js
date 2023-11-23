@@ -1,5 +1,6 @@
 import anime from "animejs";
 import ScrollReveal from "scrollreveal";
+const bootstrap = require('bootstrap');
 
 const win = window
 const doc = document.documentElement
@@ -73,11 +74,121 @@ anime({
 
 // ----------------------------------------------------------------------
 
+const orderModal = new bootstrap.Modal('#order-modal', {});
+
 const orderButtons = document.querySelectorAll('.order_button');
 orderButtons.forEach((button) => {
     button.addEventListener('click', (event) => {
     event.preventDefault();
-    console.log('zzz');
+      orderModal.show();
   }
   );
 });
+
+// -----------------------------------------------------------------
+
+const validate = el => {
+  const checkboxes = el.querySelectorAll('input[type="checkbox"]');
+  return [...checkboxes].some(e => e.checked);
+};
+
+const formEl = document.querySelector('form');
+const statusEl = formEl.querySelector('.status-message');
+const checkboxGroupEl = formEl.querySelector('#order_products');
+
+formEl.addEventListener('submit', e => {
+  if (!validate(checkboxGroupEl)) {
+    e.preventDefault();
+    statusEl.textContent = "Error: select at least one checkbox";
+    statusEl.classList.remove('d-none');
+  }
+});
+
+// ---------------------------------------------------------------
+
+let totalItems = 0;
+let currentOffset = 0;
+let lock = false;
+const inProgressModal = new bootstrap.Modal('#inProgressModal', {});
+
+window.addEventListener('scroll', (event) => {
+  const windowHeight = window.innerHeight;
+  const windowScroll = window.scrollY;
+  const documentHeight = document.body.scrollHeight;
+
+  if (windowHeight + windowScroll >= documentHeight) {
+    if (currentOffset < totalItems) {
+      fetchData(ajaxRequestItemsLimit, currentOffset);
+    }
+  }
+});
+
+fetchData(ajaxRequestItemsLimit, currentOffset);
+
+// ---------------------------------------
+
+function addItem(item) {
+  const itemDiv = document.createElement('div');
+  let html =
+      `<div class="card">
+        <div class="card-body">`;
+
+  html += `<span class="badge bg-primary">${item.created_at}</span><br>`;
+  html += `${item.author}<br>`;
+  html += `${item.message}<br>`;
+
+  html += `</div>
+             </div>`;
+  html += `<br>`;
+  itemDiv.innerHTML = html;
+  const contentDiv = document.querySelector('.reviews');
+  contentDiv.appendChild(itemDiv);
+}
+
+// ---------------------------------------
+
+function fetchData(limit, offset) {
+  if (lock) {
+    return;
+  }
+
+  lock = true;
+  inProgress(true);
+
+  const url = new URL(reviewListFetchUrl);
+  url.searchParams.append('limit', limit);
+  url.searchParams.append('offset', offset);
+  fetch(url.href)
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        if (data.status === 'ok') {
+
+          totalItems = data.total;
+
+          data.items.forEach((item) => {
+            addItem(item);
+          });
+
+          if (offset < data.total) {
+            currentOffset += ajaxRequestItemsLimit;
+          }
+
+          lock = false;
+          inProgress(false);
+        }
+      });
+}
+
+// ---------------------------------------
+
+function inProgress(show) {
+  if (show) {
+    inProgressModal.show();
+  } else {
+    setTimeout(() => {
+      inProgressModal.hide();
+    }, 1500);
+  }
+}

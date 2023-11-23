@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en" class="no-js">
-<html>
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -18,7 +17,22 @@
     </head>
 
     <body class="is-boxed has-animations">
-        {% block body %}{% endblock %}
+
+        <div class="flash-messages">
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                        </button>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+
+        {% block body %}
+        {% endblock %}
+
     </body>
 
 </html>

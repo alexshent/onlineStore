@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-left">
+
+        <a href="#" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+            <span class="fs-5 d-none d-sm-inline">Menu</span>
+        </a>
+
+        <div class="ms-3">
+        <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start navbar-nav" id="menu">
+            <li class="nav-item">
+                <a href="{{ path('app_main') }}" class="nav-link align-middle px-0">
+                    <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Home</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ path('app_admin') }}" class="nav-link px-0 align-middle">
+                    <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">Dashboard</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ path('app_admin_order_list') }}" class="nav-link px-0 align-middle">
+                    <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Orders</span></a>
+            </li>
+
+            <li>
+                <a href="{{ path('app_admin_product_list') }}" class="nav-link px-0 align-middle">
+                    <i class="fs-4 bi-grid"></i> <span class="ms-1 d-none d-sm-inline">Products</span> </a>
+            </li>
+        </ul>
+        </div>
+
+    </nav>
+
+{# ---------------------------------------------------- #}
+
+    <div class="container content_div">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+{% endblock %}

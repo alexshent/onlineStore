@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% form_theme form 'bootstrap_5_layout.html.twig' %}
+
 {% block title %}Wonderful Product!{% endblock %}
 
 {% block body %}
@@ -164,6 +166,17 @@
             </section>
         </main>
 
+        {# --------------------------------------------------------------------------- #}
+
+        <script>
+            const ajaxRequestItemsLimit = {{ ajax_request_items_limit }};
+            const reviewListFetchUrl = '{{ url('app_main_review_ajax') }}';
+        </script>
+
+        <div class="reviews"></div>
+
+        {# --------------------------------------------------------------------------- #}
+
         <footer class="site-footer">
             <div class="container">
                 <div class="site-footer-inner">
@@ -216,6 +229,46 @@
                 </div>
             </div>
         </footer>
+    </div>
+
+{# --------------------------------------------------------- #}
+
+    <div class="modal" tabindex="-1" id="order-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                {{ form_start(form) }}
+                <div class="modal-body">
+                    {{ form_row(form.customer) }}
+                    {{ form_row(form.email) }}
+                    {{ form_row(form.address) }}
+
+                    {{ form_row(form.products) }}
+
+                    <div class="status-message alert alert-danger d-none"></div>
+                </div>
+                <div class="modal-footer">
+
+                    <div class="mb-3">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+
+                    {{ form_row(form.submit) }}
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+
+    {# --------------------------------------------------------- #}
+
+    <div class="modal" tabindex="-1" id="inProgressModal" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-body d-flex justify-content-center">
+                <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
     </div>
 
 {% endblock %}

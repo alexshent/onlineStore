@@ -16,7 +16,7 @@ Encore
 
     .copyFiles({
         from: './assets/images',
-        to: 'images/[path][name].[hash:8].[ext]',
+        to: 'images/[path][name].[ext]',
     })
 
     /*
@@ -27,9 +27,11 @@ Encore
      */
     .addEntry('app', './assets/app.js')
     .addEntry('main', './assets/main.js')
+    .addEntry('product_list', './assets/product_list.js')
+    .addEntry('order_list', './assets/order_list.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
-    .splitEntryChunks()
+    //.splitEntryChunks()
 
     // will require an extra script tag for runtime.js
     // but, you probably want this, unless you're building a single-page app
@@ -46,7 +48,7 @@ Encore
     .enableBuildNotifications()
     // .enableSourceMaps(!Encore.isProduction())
     // enables hashed filenames (e.g. app.abc123.css)
-    .enableVersioning()
+    //.enableVersioning()
 
     // configure Babel
     // .configureBabel((config) => {
