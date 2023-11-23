@@ -1,0 +1,28 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}
+    Orders List
+{% endblock %}
+
+{% block content %}
+    <script>
+        const ajaxRequestItemsLimit = {{ ajax_request_items_limit }};
+        const orderListFetchUrl = '{{ url('app_admin_order_list_ajax') }}';
+    </script>
+
+    <div class="modal" tabindex="-1" id="inProgressModal" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-body d-flex justify-content-center">
+                <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('order_list') }}
+{% endblock %}
